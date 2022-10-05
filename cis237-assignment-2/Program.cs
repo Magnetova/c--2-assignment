@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace cis237_assignment_2
+﻿namespace cis237_assignment_2
 {
     class Program
     {
