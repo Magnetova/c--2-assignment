@@ -11,9 +11,6 @@ namespace cis237_assignment_2
     /// </summary>
     class MazeSolver
     {
-        char open = '.';
-        char tried = 'o';
-        char path = 'x';
         /// <summary>
         /// This is the public method that will allow someone to use this class to solve the maze.
         /// Feel free to change the return type, or add more parameters if you like, but it can be done
@@ -33,60 +30,62 @@ namespace cis237_assignment_2
         /// More than likely you will need to pass in at a minimum the current position
         /// in X and Y maze coordinates. EX: mazeTraversal(int currentX, int currentY)
         /// </summary>
-        public bool mazeTraversal(char[,] maze, int yPos, int xPos)
+        public void mazeTraversal(char[,] maze, int col, int row)
         {
+            // place an X
+            maze[col, row] = char.Parse("X");
+
+            // draw the maze
+            // Console.Write(writer.WriteMaze(maze));
             Console.Clear();
-            PrintMaze(maze, yPos, xPos);
+            PrintMatrix(maze);
+            
 
-            if (maze[yPos, xPos] == '#')
+            // Did we reach an exit? If so, exit
+            if (maze.GetLength(0) == col + 1 || maze.GetLength(1) == row + 1)
             {
-                return false;
+                Console.Write("Solved!");
+                Environment.Exit(0);
             }
-            if (maze[yPos, xPos] == '+' || maze[yPos, xPos] == '-')
-            {
-                return false;
-            }
-            if (yPos == 0 || yPos == 11 || xPos == 0 || xPos == 11)
-            {
-                maze[yPos, xPos] = 'X';
-                return true;
-            }
-            maze[yPos,xPos] = '+';
 
-            bool found = mazeTraversal(maze, yPos, xPos - 1) ||//left
-                         mazeTraversal(maze, yPos, xPos + 1) ||//right
-                         mazeTraversal(maze, yPos - 1, xPos) ||//up
-                         mazeTraversal(maze, yPos + 1, xPos);//down
-            if (found)
+            if (maze[(col - 1), row] == '.')
             {
-                maze[yPos, xPos] = 'X';
+                mazeTraversal(maze, col - 1, row); // up
             }
-            else
-            {
-                maze[yPos, xPos] = '-';
-            }
-            return true;
 
+            if (maze[col, (row + 1)] == '.')
+            {
+                mazeTraversal(maze, col, row + 1);// right
+            }
+
+            if (maze[(col + 1), row] == '.')
+            {
+                mazeTraversal(maze, col + 1, row);// down
+            }
+
+            if (maze[col, (row - 1)] == '.')
+            {
+                mazeTraversal(maze, col, row - 1);// left
+            }
+
+            maze[col, row] = 'O';
 
         }
-        private void PrintMaze(char[,] maze, int yPos, int xPos)
+        private static void PrintMatrix<T>(T[,] matrix)
         {
-            int counter = 0;
-            int delay = 500;
-            foreach (char c in maze)
+            int delay = 300;
+            for (int i = 0; i < matrix.GetLength(0); i++)
             {
-
-                Console.Write(c + " ");
-                counter++;
-                if (counter == 12)
+                for (int j = 0; j < matrix.GetLength(1); j++)
                 {
-                    Console.WriteLine();
-                    counter = 0;
+                    Console.Write(matrix[i, j] + " ");
                 }
+                Console.WriteLine();
             }
+
             Thread.Sleep(delay);
-
         }
-
     }
+
+
 }
