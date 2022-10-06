@@ -11,6 +11,7 @@ namespace cis237_assignment_2
     /// </summary>
     class MazeSolver
     {
+        
         /// <summary>
         /// This is the public method that will allow someone to use this class to solve the maze.
         /// Feel free to change the return type, or add more parameters if you like, but it can be done
@@ -33,47 +34,133 @@ namespace cis237_assignment_2
         public void mazeTraversal(char[,] maze, int col, int row)
         {
             // place an X
-            maze[col, row] = char.Parse("X");
+           
+            bool orbsLeft = (OrbChecker(maze));
 
-            // draw the maze
-            // Console.Write(writer.WriteMaze(maze));
-            Console.Clear();
-            PrintMatrix(maze);
-            
-
-            // Did we reach an exit? If so, exit
-            if (maze.GetLength(0) == col + 1 || maze.GetLength(1) == row + 1)
+            // Did we reach an exit and collect all orbs? If so, exit
+            if (orbsLeft == false)
             {
-                Console.Write("Solved!");
-                Environment.Exit(0);
+                maze[col, row] = 'X';
+                if ((maze.GetLength(0) == col + 1 || maze.GetLength(1) == row + 1))
+                {
+                    PrintMatrix(maze);
+                    Console.Write("Solved!");
+                    return;
+                }
+                if (col < maze.GetLength(0) - 1 && row < maze.GetLength(1) - 1)
+                {
+                    //UP
+                    if (maze[(col - 1), row] == '+' || maze[(col - 1), row] == '-' || maze[(col - 1), row] == '.')
+                    {
+
+                        PrintMatrix(maze);
+                        mazeTraversal(maze, col - 1, row);
+                    }
+
+                    //RIGHT
+                    if (maze[col, (row + 1)] == '+' || maze[col, (row + 1)] == '-' || maze[col, (row + 1)] == '.')
+                    {
+
+                        PrintMatrix(maze);
+                        mazeTraversal(maze, col, row + 1);
+                    }
+
+                    //DOWN
+                    if (maze[(col + 1), row] == '+' || maze[(col + 1), row] == '-' || maze[(col + 1), row] == '.')
+                    {
+
+                        PrintMatrix(maze);
+                        mazeTraversal(maze, col + 1, row);
+                    }
+
+                    //LEFT
+                    if (maze[col, (row - 1)] == '+' || maze[col, (row - 1)] == '-' || maze[col, (row - 1)] == '.')
+                    {
+
+                        PrintMatrix(maze);
+                        mazeTraversal(maze, col, row - 1);
+                    }
+
+
+                    // if no valid path, then dead end
+                    PrintMatrix(maze);
+                    maze[col, row] = 'O';
+
+
+                }
+
             }
 
-            if (maze[(col - 1), row] == '.')
+            if (orbsLeft == true)
             {
-                mazeTraversal(maze, col - 1, row); // up
-            }
+                maze[col, row] = '+';
+                if (col < maze.GetLength(0) - 1 && row < maze.GetLength(1) - 1)
+                {
+                    //UP
+                    if (maze[(col - 1), row] == '.' || maze[(col - 1), row] == '@' && orbsLeft == true)
+                    {
 
-            if (maze[col, (row + 1)] == '.')
-            {
-                mazeTraversal(maze, col, row + 1);// right
-            }
+                        PrintMatrix(maze);
+                        mazeTraversal(maze, col - 1, row);
+                    }
+                    orbsLeft =OrbChecker(maze);
+                    //RIGHT
+                    if (maze[col, (row + 1)] == '.' || maze[col, (row + 1)] == '@' && orbsLeft == true)
+                    {
 
-            if (maze[(col + 1), row] == '.')
-            {
-                mazeTraversal(maze, col + 1, row);// down
-            }
+                        PrintMatrix(maze);
+                        mazeTraversal(maze, col, row + 1);
+                    }
+                    orbsLeft = OrbChecker(maze);
+                    //DOWN
+                    if (maze[(col + 1), row] == '.' || maze[(col + 1), row] == '@' && orbsLeft == true)
+                    {
 
-            if (maze[col, (row - 1)] == '.')
-            {
-                mazeTraversal(maze, col, row - 1);// left
-            }
+                        PrintMatrix(maze);
+                        mazeTraversal(maze, col + 1, row);
+                    }
+                    orbsLeft = OrbChecker(maze);
+                    //LEFT
+                    if (maze[col, (row - 1)] == '.' || maze[col, (row - 1)] == '@' && orbsLeft == true)
+                    {
 
-            maze[col, row] = 'O';
+                        PrintMatrix(maze);
+                        mazeTraversal(maze, col, row - 1);
+                    }
+                    orbsLeft = OrbChecker(maze);
+                    if (orbsLeft == true)
+                    {
+                        // if no valid path, then dead end
+                        PrintMatrix(maze);
+                        maze[col, row] = '-';
+                    }
+                }
+                
+            }
+         
+
+
 
         }
+
+        public bool OrbChecker(char[,] maze)
+        {
+            bool orbs = false;
+            foreach (char c in maze)
+            {
+                if (c == '@')
+                {
+                    orbs = true;
+                    return true;
+                }
+            }
+            return orbs;
+        }
+
         private static void PrintMatrix<T>(T[,] matrix)
         {
-            int delay = 300;
+            Console.Clear();
+            int delay = 200;
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
                 for (int j = 0; j < matrix.GetLength(1); j++)
