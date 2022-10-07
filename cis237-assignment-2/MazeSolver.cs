@@ -11,7 +11,7 @@ namespace cis237_assignment_2
     /// </summary>
     class MazeSolver
     {
-        
+        bool complete = false;
         /// <summary>
         /// This is the public method that will allow someone to use this class to solve the maze.
         /// Feel free to change the return type, or add more parameters if you like, but it can be done
@@ -21,6 +21,7 @@ namespace cis237_assignment_2
         {
             // Do work needed to use mazeTraversal recursive call and solve the maze.
             mazeTraversal(maze, xStart, yStart);
+            complete = false;
         }
 
 
@@ -33,51 +34,50 @@ namespace cis237_assignment_2
         /// </summary>
         public void mazeTraversal(char[,] maze, int col, int row)
         {
-            // place an X
-           
+
+
+            if(complete)
+            {
+                return;
+            }
+            PrintMatrix(maze);
             bool orbsLeft = (OrbChecker(maze));
 
             // Did we reach an exit and collect all orbs? If so, exit
             if (orbsLeft == false)
             {
+
                 maze[col, row] = 'X';
                 if ((maze.GetLength(0) == col + 1 || maze.GetLength(1) == row + 1))
                 {
                     PrintMatrix(maze);
-                    Console.Write("Solved!");
+                    complete = true;
                     return;
                 }
                 if (col < maze.GetLength(0) - 1 && row < maze.GetLength(1) - 1)
                 {
+                    
                     //UP
                     if (maze[(col - 1), row] == '+' || maze[(col - 1), row] == '-' || maze[(col - 1), row] == '.')
                     {
-
-                        PrintMatrix(maze);
                         mazeTraversal(maze, col - 1, row);
                     }
 
                     //RIGHT
                     if (maze[col, (row + 1)] == '+' || maze[col, (row + 1)] == '-' || maze[col, (row + 1)] == '.')
                     {
-
-                        PrintMatrix(maze);
                         mazeTraversal(maze, col, row + 1);
                     }
 
                     //DOWN
                     if (maze[(col + 1), row] == '+' || maze[(col + 1), row] == '-' || maze[(col + 1), row] == '.')
                     {
-
-                        PrintMatrix(maze);
                         mazeTraversal(maze, col + 1, row);
                     }
 
                     //LEFT
                     if (maze[col, (row - 1)] == '+' || maze[col, (row - 1)] == '-' || maze[col, (row - 1)] == '.')
                     {
-
-                        PrintMatrix(maze);
                         mazeTraversal(maze, col, row - 1);
                     }
 
@@ -93,7 +93,10 @@ namespace cis237_assignment_2
 
             if (orbsLeft == true)
             {
-                maze[col, row] = '+';
+                if(orbsLeft == true)
+                {
+                    maze[col, row] = '+';
+                }
                 if (col < maze.GetLength(0) - 1 && row < maze.GetLength(1) - 1)
                 {
                     //UP
@@ -102,30 +105,55 @@ namespace cis237_assignment_2
 
                         PrintMatrix(maze);
                         mazeTraversal(maze, col - 1, row);
+                        orbsLeft = OrbChecker(maze);
+                        if (!orbsLeft)
+                        {
+                            maze[col - 1, row] = 'X';
+                            PrintMatrix(maze);
+                            mazeTraversal(maze, col, row);
+                        }
                     }
-                    orbsLeft =OrbChecker(maze);
                     //RIGHT
                     if (maze[col, (row + 1)] == '.' || maze[col, (row + 1)] == '@' && orbsLeft == true)
                     {
 
                         PrintMatrix(maze);
                         mazeTraversal(maze, col, row + 1);
+                        orbsLeft = OrbChecker(maze);
+                        if (!orbsLeft)
+                        {
+                            maze[col, row + 1] = 'X';
+                            PrintMatrix(maze);
+                            mazeTraversal(maze, col, row);
+                        }
                     }
-                    orbsLeft = OrbChecker(maze);
                     //DOWN
                     if (maze[(col + 1), row] == '.' || maze[(col + 1), row] == '@' && orbsLeft == true)
                     {
 
                         PrintMatrix(maze);
                         mazeTraversal(maze, col + 1, row);
+                        orbsLeft = OrbChecker(maze);
+                        if (!orbsLeft)
+                        {
+                            maze[col + 1, row] = 'X';
+                            PrintMatrix(maze);
+                            mazeTraversal(maze, col, row);
+                        }
                     }
-                    orbsLeft = OrbChecker(maze);
                     //LEFT
                     if (maze[col, (row - 1)] == '.' || maze[col, (row - 1)] == '@' && orbsLeft == true)
                     {
 
                         PrintMatrix(maze);
                         mazeTraversal(maze, col, row - 1);
+                        orbsLeft = OrbChecker(maze);
+                        if (orbsLeft == false)
+                        {
+                            maze[col, row - 1] = 'X';
+                            PrintMatrix(maze);
+                            mazeTraversal(maze, col, row);
+                        }
                     }
                     orbsLeft = OrbChecker(maze);
                     if (orbsLeft == true)
@@ -157,20 +185,23 @@ namespace cis237_assignment_2
             return orbs;
         }
 
-        private static void PrintMatrix<T>(T[,] matrix)
+        private void PrintMatrix<T>(T[,] matrix)
         {
-            Console.Clear();
-            int delay = 200;
-            for (int i = 0; i < matrix.GetLength(0); i++)
+            if (!complete)
             {
-                for (int j = 0; j < matrix.GetLength(1); j++)
+                Console.Clear();
+                int delay = 200;
+                for (int i = 0; i < matrix.GetLength(0); i++)
                 {
-                    Console.Write(matrix[i, j] + " ");
+                    for (int j = 0; j < matrix.GetLength(1); j++)
+                    {
+                        Console.Write(matrix[i, j] + " ");
+                    }
+                    Console.WriteLine();
                 }
-                Console.WriteLine();
-            }
 
-            Thread.Sleep(delay);
+                Thread.Sleep(delay);
+            }
         }
     }
 
