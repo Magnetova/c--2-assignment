@@ -2,6 +2,7 @@
 
 ## Author
 
+Cayden Greer
 
 
 ## Description
@@ -61,8 +62,12 @@ I have a video in Canvas talking about how to approach this assignment. I STRONG
 
 ## Outside Resources Used
 
+Used to figure out how to transpose a matrix:
 
+https://www.programiz.com/c-programming/examples/matrix-transpose
 
 ## Known Problems, Issues, And/Or Errors in the Program
+
+No known problems
 
 

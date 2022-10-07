@@ -1,4 +1,6 @@
-﻿namespace cis237_assignment_2
+﻿using System;
+
+namespace cis237_assignment_2
 {
     class Program
     {
@@ -29,8 +31,8 @@
             { '#', '@', '.', '#', '.', '#', '.', '#', '.', '#', '.', '#' },
             { '#', '#', '.', '#', '.', '#', '.', '.', '.', '#', '.', '#' },
             { '#', '.', '.', '.', '.', '.', '.', '#', '#', '#', '.', '#' },
-            { '#', '#', '#', '#', '#', '#', '.', '#', '@', '#', '.', '#' },
-            { '.', '@', '.', '.', '.', '.', '.', '#', '.', '.', '.', '#' },
+            { '#', '#', '#', '#', '#', '#', '.', '#', '@', '#', '.', '.' },
+            { '#', '@', '.', '.', '.', '.', '.', '#', '.', '.', '.', '#' },
             { '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' }
             };
 
@@ -47,6 +49,19 @@
             // Solve the transposed maze.
             mazeSolver.SolveMaze(maze2, X_START, Y_START);
 
+            mazeSolver.PrintMatrix(maze1);
+
+            System.Console.WriteLine();
+
+            mazeSolver.PrintMatrix(maze2);
+            Console.Clear();
+            Console.WriteLine("Solution to original");
+            Console.WriteLine("______________________________________________");
+            mazeSolver.PrintMatrix(maze1);
+            Console.WriteLine("\n\n\n");
+            Console.WriteLine("Solution to transpose");
+            Console.WriteLine("______________________________________________");
+            mazeSolver.PrintMatrix(maze2);
         }
 
         /// <summary>
