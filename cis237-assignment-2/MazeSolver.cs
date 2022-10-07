@@ -48,7 +48,7 @@ namespace cis237_assignment_2
             {
 
                 maze[col, row] = 'X';
-                if ((maze.GetLength(0) == col + 1 || maze.GetLength(1) == row + 1))
+                if ((maze.GetLength(0) == col + 1 || maze.GetLength(1) == row + 1) || col == 0 || row == 0)
                 {
                     PrintMatrix(maze);
                     complete = true;
@@ -83,8 +83,9 @@ namespace cis237_assignment_2
 
 
                     // if no valid path, then dead end
-                    PrintMatrix(maze);
                     maze[col, row] = 'O';
+                    PrintMatrix(maze);
+
 
 
                 }
@@ -97,33 +98,28 @@ namespace cis237_assignment_2
                 {
                     maze[col, row] = '+';
                 }
-                if (col < maze.GetLength(0) - 1 && row < maze.GetLength(1) - 1)
+                if (col < maze.GetLength(0) - 1 && row < maze.GetLength(1) - 1 && col > 0 && row > 0)
                 {
                     //UP
                     if (maze[(col - 1), row] == '.' || maze[(col - 1), row] == '@' && orbsLeft == true)
                     {
 
-                        PrintMatrix(maze);
                         mazeTraversal(maze, col - 1, row);
                         orbsLeft = OrbChecker(maze);
                         if (!orbsLeft)
                         {
                             maze[col - 1, row] = 'X';
-                            PrintMatrix(maze);
                             mazeTraversal(maze, col, row);
                         }
                     }
                     //RIGHT
                     if (maze[col, (row + 1)] == '.' || maze[col, (row + 1)] == '@' && orbsLeft == true)
                     {
-
-                        PrintMatrix(maze);
                         mazeTraversal(maze, col, row + 1);
                         orbsLeft = OrbChecker(maze);
                         if (!orbsLeft)
                         {
                             maze[col, row + 1] = 'X';
-                            PrintMatrix(maze);
                             mazeTraversal(maze, col, row);
                         }
                     }
@@ -131,13 +127,11 @@ namespace cis237_assignment_2
                     if (maze[(col + 1), row] == '.' || maze[(col + 1), row] == '@' && orbsLeft == true)
                     {
 
-                        PrintMatrix(maze);
                         mazeTraversal(maze, col + 1, row);
                         orbsLeft = OrbChecker(maze);
                         if (!orbsLeft)
                         {
                             maze[col + 1, row] = 'X';
-                            PrintMatrix(maze);
                             mazeTraversal(maze, col, row);
                         }
                     }
@@ -145,13 +139,11 @@ namespace cis237_assignment_2
                     if (maze[col, (row - 1)] == '.' || maze[col, (row - 1)] == '@' && orbsLeft == true)
                     {
 
-                        PrintMatrix(maze);
                         mazeTraversal(maze, col, row - 1);
                         orbsLeft = OrbChecker(maze);
                         if (orbsLeft == false)
                         {
                             maze[col, row - 1] = 'X';
-                            PrintMatrix(maze);
                             mazeTraversal(maze, col, row);
                         }
                     }
@@ -159,8 +151,9 @@ namespace cis237_assignment_2
                     if (orbsLeft == true)
                     {
                         // if no valid path, then dead end
-                        PrintMatrix(maze);
                         maze[col, row] = '-';
+                        PrintMatrix(maze);
+
                     }
                 }
                 
@@ -190,7 +183,7 @@ namespace cis237_assignment_2
             if (!complete)
             {
                 Console.Clear();
-                int delay = 200;
+                int delay = 150;
                 for (int i = 0; i < matrix.GetLength(0); i++)
                 {
                     for (int j = 0; j < matrix.GetLength(1); j++)
